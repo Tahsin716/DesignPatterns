@@ -215,3 +215,92 @@ public class LazySingleton
 ```
 
 This implementation is thread-safe and uses the Lazy<T> class for efficient lazy initialization.
+
+## Drawbacks of the Singleton Design Pattern
+
+### 1. **Global State:** 
+
+Singletons introduce a global state to your application, and this global state can be modified from anywhere in the code. This can lead to unexpected side effects and make it challenging to understand and reason about the behavior of the system.
+
+   ```java
+   // Example of modifying global state using a Singleton
+   Singleton.getInstance().setSomeValue(42);
+   ```
+
+### 2. **Testability Issues:** 
+
+Due to the global state, it can be difficult to isolate and test components that depend on a Singleton. Mocking or substituting the Singleton instance for testing purposes might be necessary, which can be cumbersome.
+
+   ```java
+   // Example of a class tightly coupled to a Singleton
+   public class MyClass {
+       private Singleton singleton = Singleton.getInstance();
+
+       // ...
+   }
+   ```
+
+### 3. **Violates Single Responsibility Principle:** 
+
+The Singleton pattern can lead to a violation of the Single Responsibility Principle (SRP) because a Singleton is responsible for both 
+
+1. managing its instance
+2. performing its primary functionality
+
+This can make the code less modular and harder to maintain.
+
+   ```java
+   // Example of a Singleton violating SRP
+   public class DatabaseSingleton {
+       private static DatabaseSingleton instance;
+
+       private DatabaseSingleton() {
+           // ...
+       }
+
+       public static DatabaseSingleton getInstance() {
+           if (instance == null) {
+               instance = new DatabaseSingleton();
+           }
+           return instance;
+       }
+
+       public void performDatabaseOperation() {
+           // Database operation logic here
+       }
+   }
+   ```
+
+### 4. **Difficulties in Subclassing:** 
+
+Extending a class that follows the Singleton pattern can be challenging, especially when dealing with inheritance. Subclassing a Singleton might lead to unexpected behavior, and modifying the Singleton to allow subclassing could break its intended design.
+
+   ```java
+   // Example of subclassing a Singleton
+   public class SubclassSingleton extends Singleton {
+       // ...
+   }
+   ```
+
+### 5. **Concurrency Issues (in some implementations):** 
+
+In scenarios where lazy initialization is used and multiple threads are involved, there can be race conditions. If not properly handled, this can lead to the creation of multiple instances of the Singleton, defeating the purpose of the pattern.
+
+   ```java
+   // Example of a lazy Singleton with a potential concurrency issue
+   public class LazySingleton {
+       private static LazySingleton instance;
+
+       private LazySingleton() {
+           // ...
+       }
+
+       public static LazySingleton getInstance() {
+           if (instance == null) {
+               // Potential race condition here
+               instance = new LazySingleton();
+           }
+           return instance;
+       }
+   }
+   ```
