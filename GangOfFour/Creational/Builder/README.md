@@ -85,3 +85,88 @@ public class Client {
     }
 }
 ```
+
+`csharp`
+```csharp
+// Product
+//
+// Represents the complex object being constructed. It's the final object that the client code wants to obtain.
+public class Computer
+{
+    public string CPU { get; set; }
+    public string RAM { get; set; }
+    public string Storage { get; set; }
+
+    // Constructors and methods...
+}
+
+// Builder interface
+//
+// An interface or abstract class that defines the steps to construct the product.
+//Each step corresponds to setting a specific attribute or part of the product.
+public interface IComputerBuilder
+{
+    void BuildCPU(string cpu);
+    void BuildRAM(string ram);
+    void BuildStorage(string storage);
+    Computer GetResult();
+}
+
+// ConcreteBuilder
+//
+// Implements the Builder interface and provides concrete implementations for constructing the product.
+// It keeps track of the constructed product and provides methods for setting its attributes.
+public class DesktopComputerBuilder : IComputerBuilder
+{
+    private Computer computer = new Computer();
+
+    public void BuildCPU(string cpu)
+    {
+        computer.CPU = cpu;
+    }
+
+    public void BuildRAM(string ram)
+    {
+        computer.RAM = ram;
+    }
+
+    public void BuildStorage(string storage)
+    {
+        computer.Storage = storage;
+    }
+
+    public Computer GetResult()
+    {
+        return computer;
+    }
+}
+
+// Director
+//
+// Orchestrates the construction of the product using a builder.
+// It knows the order in which to call the builder's methods to construct the final product.
+public class ComputerDirector
+{
+    public Computer Construct(IComputerBuilder builder)
+    {
+        builder.BuildCPU("Intel i7");
+        builder.BuildRAM("16GB");
+        builder.BuildStorage("512GB SSD");
+        return builder.GetResult();
+    }
+}
+
+// Client code
+class Client
+{
+    static void Main()
+    {
+        IComputerBuilder builder = new DesktopComputerBuilder();
+        ComputerDirector director = new ComputerDirector();
+
+        Computer desktop = director.Construct(builder);
+        Console.WriteLine(desktop);
+    }
+}
+
+```
