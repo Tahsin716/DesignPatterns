@@ -8,6 +8,23 @@ Builder Design Pattern is a creational pattern to create complex objects piecewi
 
 The Builder Pattern aims to solve the problem of an anti-pattern known as the telescoping constructor. Telescoping constructors occur when a class has multiple constructors with an increasing number of parameters, which can lead to confusion and error-prone code.
 
+## What are the use cases of the Builder Design Pattern?
+
+### 1. Building Documents in Word Processors:
+
+Word processors often need to create complex documents with various formatting options, styles, and elements. A builder pattern can be used to construct documents step by step, setting attributes like fonts, paragraphs, tables, and images.
+
+### 2. Creating SQL Queries:
+
+When constructing SQL queries dynamically, especially when dealing with complex queries involving multiple conditions, joins, and sorting options, a builder pattern can help create a query object step by step, allowing for flexibility and readability.
+
+### 3. Configuring Network Requests:
+
+When making HTTP requests, constructing a request with headers, parameters, authentication details, and other configurations can be intricate. A builder pattern can simplify this process, allowing developers to set specific options as needed.
+
+### 4. Building User Interface Components:
+
+In graphical user interface frameworks, constructing complex UI components involves setting various properties such as size, color, layout, and event handlers. A builder pattern can be employed to create these components with a fluent API, making the code more expressive.
 
 ## Different implementations of Builder Pattern
 
