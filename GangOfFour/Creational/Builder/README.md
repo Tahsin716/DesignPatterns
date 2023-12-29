@@ -170,3 +170,36 @@ class Client
 }
 
 ```
+
+### 2. Using Lombok library
+
+`java`
+```java
+import lombok.Builder;
+import lombok.ToString;
+
+// Product class
+@Builder
+@ToString
+public class Computer {
+    private String CPU;
+    private String RAM;
+    private String storage;
+}
+
+// Client code
+public class Client {
+    public static void main(String[] args) {
+        // Use the generated builder to construct the object
+        Computer desktop = Computer.builder()
+                .CPU("Intel i7")
+                .RAM("16GB")
+                .storage("512GB SSD")
+                .build();
+
+        // Print the result
+        System.out.println(desktop);
+    }
+}
+
+```
