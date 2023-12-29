@@ -58,6 +58,65 @@ public class Client {
 }
 ```
 
+`csharp`
+```csharp
+// Payment interface
+interface IPayment
+{
+    void ProcessPayment();
+}
+
+// Concrete payments
+class CreditCardPayment : IPayment
+{
+    public void ProcessPayment()
+    {
+        Console.WriteLine("Processing Credit Card Payment");
+    }
+}
+
+class PayPalPayment : IPayment
+{
+    public void ProcessPayment()
+    {
+        Console.WriteLine("Processing PayPal Payment");
+    }
+}
+
+// Simple Factory
+class PaymentFactory
+{
+    public IPayment CreatePayment(string type)
+    {
+        switch (type)
+        {
+            case "CreditCard":
+                return new CreditCardPayment();
+            case "PayPal":
+                return new PayPalPayment();
+            default:
+                throw new ArgumentException("Invalid payment type");
+        }
+    }
+}
+
+// Client code
+class Client
+{
+    static void Main()
+    {
+        PaymentFactory factory = new PaymentFactory();
+
+        IPayment creditCardPayment = factory.CreatePayment("CreditCard");
+        creditCardPayment.ProcessPayment();
+
+        IPayment payPalPayment = factory.CreatePayment("PayPal");
+        payPalPayment.ProcessPayment();
+    }
+}
+
+```
+
 ### 2. **Factory Method:**
 In the Factory Method pattern, each subclass provides an interface for creating an object, but leaves the choice of its type to the subclasses, creating an instance of the appropriate subclass.
 
@@ -111,6 +170,71 @@ public class Client {
         payPalPayment.processPayment();
     }
 }
+```
+
+`csharp`
+```csharp
+// Payment interface
+interface IPayment
+{
+    void ProcessPayment();
+}
+
+// Concrete payments
+class CreditCardPayment : IPayment
+{
+    public void ProcessPayment()
+    {
+        Console.WriteLine("Processing Credit Card Payment");
+    }
+}
+
+class PayPalPayment : IPayment
+{
+    public void ProcessPayment()
+    {
+        Console.WriteLine("Processing PayPal Payment");
+    }
+}
+
+// Payment creator interface
+interface IPaymentCreator
+{
+    IPayment CreatePayment();
+}
+
+// Concrete payment creators
+class CreditCardPaymentCreator : IPaymentCreator
+{
+    public IPayment CreatePayment()
+    {
+        return new CreditCardPayment();
+    }
+}
+
+class PayPalPaymentCreator : IPaymentCreator
+{
+    public IPayment CreatePayment()
+    {
+        return new PayPalPayment();
+    }
+}
+
+// Client code
+class Client
+{
+    static void Main()
+    {
+        IPaymentCreator creditCardPaymentCreator = new CreditCardPaymentCreator();
+        IPayment creditCardPayment = creditCardPaymentCreator.CreatePayment();
+        creditCardPayment.ProcessPayment();
+
+        IPaymentCreator payPalPaymentCreator = new PayPalPaymentCreator();
+        IPayment payPalPayment = payPalPaymentCreator.CreatePayment();
+        payPalPayment.ProcessPayment();
+    }
+}
+
 ```
 
 ### 3. **Abstract Factory:**
@@ -196,4 +320,106 @@ public class Client {
         expressPayPalPayment.processPayPalPayment();
     }
 }
+```
+
+`csharp`
+```csharp
+// Abstract payment interfaces
+interface ICreditCardPayment
+{
+    void ProcessCreditCardPayment();
+}
+
+interface IPayPalPayment
+{
+    void ProcessPayPalPayment();
+}
+
+// Concrete credit card payments
+class VisaCreditCardPayment : ICreditCardPayment
+{
+    public void ProcessCreditCardPayment()
+    {
+        Console.WriteLine("Processing Visa Credit Card Payment");
+    }
+}
+
+class MasterCardCreditCardPayment : ICreditCardPayment
+{
+    public void ProcessCreditCardPayment()
+    {
+        Console.WriteLine("Processing MasterCard Credit Card Payment");
+    }
+}
+
+// Concrete PayPal payments
+class StandardPayPalPayment : IPayPalPayment
+{
+    public void ProcessPayPalPayment()
+    {
+        Console.WriteLine("Processing Standard PayPal Payment");
+    }
+}
+
+class ExpressPayPalPayment : IPayPalPayment
+{
+    public void ProcessPayPalPayment()
+    {
+        Console.WriteLine("Processing Express PayPal Payment");
+    }
+}
+
+// Abstract Factory interface
+interface IPaymentFactory
+{
+    ICreditCardPayment CreateCreditCardPayment();
+    IPayPalPayment CreatePayPalPayment();
+}
+
+// Concrete factories
+class StandardPaymentFactory : IPaymentFactory
+{
+    public ICreditCardPayment CreateCreditCardPayment()
+    {
+        return new VisaCreditCardPayment();
+    }
+
+    public IPayPalPayment CreatePayPalPayment()
+    {
+        return new StandardPayPalPayment();
+    }
+}
+
+class ExpressPaymentFactory : IPaymentFactory
+{
+    public ICreditCardPayment CreateCreditCardPayment()
+    {
+        return new MasterCardCreditCardPayment();
+    }
+
+    public IPayPalPayment CreatePayPalPayment()
+    {
+        return new ExpressPayPalPayment();
+    }
+}
+
+// Client code
+class Client
+{
+    static void Main()
+    {
+        IPaymentFactory standardPaymentFactory = new StandardPaymentFactory();
+        ICreditCardPayment standardCreditCardPayment = standardPaymentFactory.CreateCreditCardPayment();
+        IPayPalPayment standardPayPalPayment = standardPaymentFactory.CreatePayPalPayment();
+        standardCreditCardPayment.ProcessCreditCardPayment();
+        standardPayPalPayment.ProcessPayPalPayment();
+
+        IPaymentFactory expressPaymentFactory = new ExpressPaymentFactory();
+        ICreditCardPayment expressCreditCardPayment = expressPaymentFactory.CreateCreditCardPayment();
+        IPayPalPayment expressPayPalPayment = expressPaymentFactory.CreatePayPalPayment();
+        expressCreditCardPayment.ProcessCreditCardPayment();
+        expressPayPalPayment.ProcessPayPalPayment();
+    }
+}
+
 ```
