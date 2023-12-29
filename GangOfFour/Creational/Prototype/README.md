@@ -88,3 +88,92 @@ public class Client {
 }
 
 ```
+
+### 2. Deep Copy
+
+Creates a new object and recursively copies all referenced objects. The clone and the original have no shared references to objects.
+
+`java`
+```java
+// Prototype interface
+interface Prototype {
+    Prototype clone();
+}
+
+// Address class
+class Address implements Prototype {
+    private String city;
+    private String zipCode;
+
+    public Address(String city, String zipCode) {
+        this.city = city;
+        this.zipCode = zipCode;
+    }
+
+    // Deep copy constructor
+    private Address(Address source) {
+        this.city = source.city;
+        this.zipCode = source.zipCode;
+    }
+
+    @Override
+    public Prototype clone() {
+        return new Address(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Address{city='" + city + "', zipCode='" + zipCode + "'}";
+    }
+}
+
+// Person class with a reference to Address
+class Person implements Prototype {
+    private String name;
+    private int age;
+    private Address address;
+
+    public Person(String name, int age, Address address) {
+        this.name = name;
+        this.age = age;
+        this.address = address;
+    }
+
+    // Deep copy constructor
+    private Person(Person source) {
+        this.name = source.name;
+        this.age = source.age;
+        this.address = (Address) source.address.clone(); // Deep copy of Address
+    }
+
+    @Override
+    public Prototype clone() {
+        return new Person(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Person{name='" + name + "', age=" + age + ", address=" + address + "}";
+    }
+}
+
+public class Client {
+    public static void main(String[] args) {
+        // Original person
+        Address originalAddress = new Address("City1", "12345");
+        Person originalPerson = new Person("John", 25, originalAddress);
+
+        System.out.println("Original Person: " + originalPerson);
+
+        // Deep copy
+        Person clonedPerson = (Person) originalPerson.clone();
+        System.out.println("Cloned Person: " + clonedPerson);
+
+        // Modify the address in the cloned person
+        clonedPerson.address = new Address("City2", "67890");
+
+        // Print the original person to show that the address is not shared
+        System.out.println("Original Person after modifying clone: " + originalPerson);
+    }
+}
+```
