@@ -4,6 +4,24 @@
 
 Factory Design Pattern is a creational pattern that creates objects without exposing their creation logic, letting clients specify and obtain desired products.
 
+## What are the use cases of the Factory Design Pattern?
+
+### 1. GUI Component Creation:
+
+In a graphical user interface framework, a GUI component factory can be used to create various UI elements like buttons, text fields, and windows. Different platforms may have different implementations of these components, and a factory pattern helps create them based on the specific platform.
+
+### 2. Document Creation in Word Processors:
+
+In word processing applications, a document factory can be used to create different types of documents (e.g., text documents, spreadsheets, presentations). Each document type may require a different set of objects and behaviors, and a factory pattern helps create these documents.
+
+### 3. Payment Gateway Integration:
+
+In an e-commerce platform, a payment gateway integration can be abstracted using a factory pattern. Different payment gateways may have unique implementations, and a factory can create the appropriate payment gateway instance based on configuration or user preferences.
+
+### 4. Database Connection Creation:
+
+A database abstraction layer can use the Factory pattern to create specific database connections (e.g., MySQL, PostgreSQL, SQLite). This allows the application to switch between different database systems without changing the client code.
+
 
 ## Different implementations of Factory Pattern
 
