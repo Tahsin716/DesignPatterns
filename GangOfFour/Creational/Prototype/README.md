@@ -67,7 +67,7 @@ class Person implements Prototype {
     }
 }
 
-public class Client {
+class Client {
     public static void main(String[] args) {
         // Original person
         Address originalAddress = new Address("City1", "12345");
@@ -157,7 +157,7 @@ class Person implements Prototype {
     }
 }
 
-public class Client {
+class Client {
     public static void main(String[] args) {
         // Original person
         Address originalAddress = new Address("City1", "12345");
