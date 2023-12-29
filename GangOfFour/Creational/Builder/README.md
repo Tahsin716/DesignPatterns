@@ -28,7 +28,7 @@ In graphical user interface frameworks, constructing complex UI components invol
 
 ## Different implementations of Builder Pattern
 
-### 1. Regular Builder Pattern
+### 1. Regular Builder Pattern:
 
 `java`
 ```java
@@ -188,7 +188,7 @@ class Client
 
 ```
 
-### 2. Using Lombok library
+### 2. Using Lombok library:
 
 `java`
 ```java
@@ -217,6 +217,177 @@ public class Client {
         // Print the result
         System.out.println(desktop);
     }
+}
+
+```
+
+### 3. Using Fluent Interface:
+
+Builder Design Patterns using a fluent interface involve chaining method calls in a way that makes the code more readable and expressive.
+
+`java`
+```java
+public class Computer {
+    private String CPU;
+    private String RAM;
+    private String storage;
+
+    // Constructor of the Product class is private
+    // It is called from within the inner builder class
+    private Computer(Builder builder) {
+        this.CPU = builder.CPU;
+        this.RAM = builder.RAM;
+        this.storage = builder.storage;
+    }
+
+    public String getCPU() {
+        return CPU;
+    }
+
+    public String getRAM() {
+        return RAM;
+    }
+
+    public String getStorage() {
+        return storage;
+    }
+
+    @Override
+    public String toString() {
+        return "Computer{" +
+                "CPU='" + CPU + '\'' +
+                ", RAM='" + RAM + '\'' +
+                ", storage='" + storage + '\'' +
+                '}';
+    }
+
+    // Builder class
+    //
+    // The builder class is inside of the product class
+    // this inner builder class calls the private product class
+    public static class Builder {
+        private String CPU;
+        private String RAM;
+        private String storage;
+
+        public Builder setCPU(String CPU) {
+            this.CPU = CPU;
+            return this;
+        }
+
+        public Builder setRAM(String RAM) {
+            this.RAM = RAM;
+            return this;
+        }
+
+        public Builder setStorage(String storage) {
+            this.storage = storage;
+            return this;
+        }
+
+        public Computer build() {
+            return new Computer(this);
+        }
+    }
+}
+
+// Example of fluent interface usage
+public static void main(String[] args) {
+    Computer computer = new Computer.Builder()
+            .setCPU("Intel i7")
+            .setRAM("16GB")
+            .setStorage("512GB SSD")
+            .build();
+
+    System.out.println(computer);
+}
+
+```
+
+`csharp`
+```csharp
+using System;
+
+public class Computer
+{
+    private string CPU;
+    private string RAM;
+    private string storage;
+
+    // Constructor of the Product class is private
+    // It is called from within the inner builder class
+    private Computer(Builder builder)
+    {
+        this.CPU = builder.CPU;
+        this.RAM = builder.RAM;
+        this.storage = builder.Storage;
+    }
+
+    public string GetCPU()
+    {
+        return CPU;
+    }
+
+    public string GetRAM()
+    {
+        return RAM;
+    }
+
+    public string GetStorage()
+    {
+        return storage;
+    }
+
+    public override string ToString()
+    {
+        return $"Computer{{CPU='{CPU}', RAM='{RAM}', Storage='{storage}'}}";
+    }
+
+    // Builder class
+    //
+    // The builder class is inside of the product class
+    // this inner builder class calls the private product class
+    public class Builder
+    {
+        public string CPU { get; private set; }
+        public string RAM { get; private set; }
+        public string Storage { get; private set; }
+
+        public Builder SetCPU(string cpu)
+        {
+            this.CPU = cpu;
+            return this;
+        }
+
+        public Builder SetRAM(string ram)
+        {
+            this.RAM = ram;
+            return this;
+        }
+
+        public Builder SetStorage(string storage)
+        {
+            this.Storage = storage;
+            return this;
+        }
+
+        public Computer Build()
+        {
+            return new Computer(this);
+        }
+    }
+}
+
+// Example of fluent interface usage
+public static void Main()
+{
+    Computer computer = new Computer.Builder()
+        .SetCPU("Intel i7")
+        .SetRAM("16GB")
+        .SetStorage("512GB SSD")
+        .Build();
+
+    Console.WriteLine(computer);
 }
 
 ```
