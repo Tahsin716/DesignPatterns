@@ -224,3 +224,222 @@ public class Client {
 
 
 ```
+
+`csharp`
+```csharp
+using System;
+
+// State interface
+public interface IGumballMachineState
+{
+    void InsertQuarter();
+    void EjectQuarter();
+    void TurnCrank();
+    void Dispense();
+}
+
+// Concrete States
+public class NoQuarterState : IGumballMachineState
+{
+    private readonly GumballMachine machine;
+
+    public NoQuarterState(GumballMachine machine)
+    {
+        this.machine = machine;
+    }
+
+    public void InsertQuarter()
+    {
+        Console.WriteLine("You inserted a quarter.");
+        machine.SetState(machine.HasQuarterState);
+    }
+
+    public void EjectQuarter()
+    {
+        Console.WriteLine("You haven't inserted a quarter.");
+    }
+
+    public void TurnCrank()
+    {
+        Console.WriteLine("You turned, but there's no quarter.");
+    }
+
+    public void Dispense()
+    {
+        Console.WriteLine("You need to pay first.");
+    }
+}
+
+public class HasQuarterState : IGumballMachineState
+{
+    private readonly GumballMachine machine;
+
+    public HasQuarterState(GumballMachine machine)
+    {
+        this.machine = machine;
+    }
+
+    public void InsertQuarter()
+    {
+        Console.WriteLine("You can't insert another quarter.");
+    }
+
+    public void EjectQuarter()
+    {
+        Console.WriteLine("Quarter returned.");
+        machine.SetState(machine.NoQuarterState);
+    }
+
+    public void TurnCrank()
+    {
+        Console.WriteLine("You turned the crank. Gumball coming!");
+        machine.SetState(machine.SoldState);
+    }
+
+    public void Dispense()
+    {
+        Console.WriteLine("No gumball dispensed.");
+    }
+}
+
+public class SoldState : IGumballMachineState
+{
+    private readonly GumballMachine machine;
+
+    public SoldState(GumballMachine machine)
+    {
+        this.machine = machine;
+    }
+
+    public void InsertQuarter()
+    {
+        Console.WriteLine("Please wait, we're already giving you a gumball.");
+    }
+
+    public void EjectQuarter()
+    {
+        Console.WriteLine("Sorry, you already turned the crank.");
+    }
+
+    public void TurnCrank()
+    {
+        Console.WriteLine("Turning twice doesn't get you another gumball!");
+    }
+
+    public void Dispense()
+    {
+        machine.ReleaseGumball();
+        if (machine.Count > 0)
+        {
+            machine.SetState(machine.NoQuarterState);
+        }
+        else
+        {
+            Console.WriteLine("Oops, out of gumballs!");
+            machine.SetState(machine.SoldOutState);
+        }
+    }
+}
+
+public class SoldOutState : IGumballMachineState
+{
+    private readonly GumballMachine machine;
+
+    public SoldOutState(GumballMachine machine)
+    {
+        this.machine = machine;
+    }
+
+    public void InsertQuarter()
+    {
+        Console.WriteLine("Sorry, the machine is sold out.");
+    }
+
+    public void EjectQuarter()
+    {
+        Console.WriteLine("No quarter to eject.");
+    }
+
+    public void TurnCrank()
+    {
+        Console.WriteLine("You turned, but there are no gumballs.");
+    }
+
+    public void Dispense()
+    {
+        Console.WriteLine("No gumball dispensed.");
+    }
+}
+
+// Context class (Gumball machine)
+public class GumballMachine
+{
+    private IGumballMachineState state;
+    private int count;
+
+    public GumballMachine(int initialCount)
+    {
+        count = initialCount;
+        NoQuarterState = new NoQuarterState(this);
+        HasQuarterState = new HasQuarterState(this);
+        SoldState = new SoldState(this);
+        SoldOutState = new SoldOutState(this);
+
+        if (initialCount > 0)
+        {
+            state = NoQuarterState;
+        }
+        else
+        {
+            state = SoldOutState;
+        }
+    }
+
+    // Methods to perform actions based on the current state
+    public void InsertQuarter() => state.InsertQuarter();
+
+    public void EjectQuarter() => state.EjectQuarter();
+
+    public void TurnCrank()
+    {
+        state.TurnCrank();
+        state.Dispense();
+    }
+
+    // Other methods...
+
+    // State transition methods
+    public void SetState(IGumballMachineState newState) => state = newState;
+
+    public IGumballMachineState NoQuarterState { get; }
+    public IGumballMachineState HasQuarterState { get; }
+    public IGumballMachineState SoldState { get; }
+    public IGumballMachineState SoldOutState { get; }
+
+    // Other methods...
+}
+
+// Client code
+class Program
+{
+    static void Main()
+    {
+        GumballMachine gumballMachine = new GumballMachine(5);
+
+        gumballMachine.InsertQuarter();
+        gumballMachine.TurnCrank();
+
+        gumballMachine.InsertQuarter();
+        gumballMachine.EjectQuarter();
+        gumballMachine.TurnCrank();
+
+        gumballMachine.InsertQuarter();
+        gumballMachine.TurnCrank();
+        gumballMachine.InsertQuarter();
+        gumballMachine.TurnCrank();
+        gumballMachine.InsertQuarter();
+        gumballMachine.TurnCrank();
+    }
+}
+
+```
